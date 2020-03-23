@@ -114,12 +114,11 @@ int main()
     cin>>goal[0];
     cout<<"Enter goal y_pos: ";
     cin>>goal[1];
-
+    
+    //Add obstacles
     char choice;
     cout<<"Add obstacles?[Y/N]: ";
     cin>>choice;
-
-
     if(choice=='y')
     {
     cout<<"Enter the number of obstacles: ";
