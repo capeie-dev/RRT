@@ -8,7 +8,7 @@
 using namespace std;
 
 int depth=0; // to be used to keep node constraint
-vector<int> parentglobal;
+
 float distance(vector<int> point1, vector<int> point2)
 {
 	float x = point1[0] - point2[0]; //calculating number to square in next step
@@ -38,6 +38,10 @@ class vertex{
                         depth = depth+1;
                     }
             }
+        void print()
+        {
+            cout<<"Position: "<<pos[0]<<" "<<pos[1];
+        }
 
 };
 
@@ -52,15 +56,40 @@ vertex find_nearest_vertex(vector<vertex> vertices, vector<int> newpoint)
                {
                 nearest = vertices[x];
                 nearest_dist = dist;
-                cout<<dist<<endl;
+
                }
 
 
        }
-    ::parentglobal = nearest.parent;
+
     return nearest;
 }
 
+void get_path(vector<vertex> vertices, vector<int> start_pos)
+{
+    int siz = vertices.size();
+    int i = siz-1;
+    vector<int> parent = vertices[siz-1].parent;
+
+    while(parent[0]!=start_pos[0] && parent[1]!=start_pos[1])
+    {
+    for(int x=0;x<siz-1;++x)
+        {
+        if(vertices[x].pos[0] == parent[0] && vertices[x].pos[1]==parent[1] && x!=i)
+          {
+                cout<<"\nNode info: \n";
+                vertices[x].print();
+                cout<<endl;
+                parent = vertices[x].parent;
+                i=x;
+
+          }
+
+
+        }
+    }
+
+}
 
 int main()
 {   //DEFINATIONS
@@ -83,7 +112,7 @@ int main()
     do{
 
         newpoint = {rand() % height, rand() % width };
-        cout<<"newpoint\n"<<newpoint[0]<<" "<<newpoint[1]<<endl;
+        //cout<<"newpoint\n"<<newpoint[0]<<" "<<newpoint[1]<<endl;
         vertex add = find_nearest_vertex(vertices,newpoint);
         par = add.pos;
         vertex newnode(newpoint,par);
@@ -98,13 +127,14 @@ int main()
 
     }while(true);
     label:
-   for(int x=0; x<vertices.size();++x)
+   /*for(int x=0; x<vertices.size();++x)
        {
            cout<<"Node Info:\n"<<"Parent: "<<vertices[x].parent[0]<<" "<<vertices[x].parent[1]<<endl<<"Pos: "<<vertices[x].pos[0]<<" "<<vertices[x].pos[1]<<endl<<endl;
 
        }
+   */
     //END OF PRINTING THE TREE
-
+    get_path(vertices,pos);
     return 0;
 
 }
