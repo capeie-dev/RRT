@@ -108,11 +108,10 @@ int main()
     int height = 100;
     int width = 100;
 
-
+    bool done = true;
     do{
 
         newpoint = {rand() % height, rand() % width };
-        //cout<<"newpoint\n"<<newpoint[0]<<" "<<newpoint[1]<<endl;
         vertex add = find_nearest_vertex(vertices,newpoint);
         par = add.pos;
         vertex newnode(newpoint,par);
@@ -121,19 +120,12 @@ int main()
             {
                 if(newpoint[1]>goal[0] && newpoint[1]<goal[1])
                     {
-                        goto label;
+                         done = false;
                     }
             }
 
-    }while(true);
-    label:
-   /*for(int x=0; x<vertices.size();++x)
-       {
-           cout<<"Node Info:\n"<<"Parent: "<<vertices[x].parent[0]<<" "<<vertices[x].parent[1]<<endl<<"Pos: "<<vertices[x].pos[0]<<" "<<vertices[x].pos[1]<<endl<<endl;
-
-       }
-   */
-    //END OF PRINTING THE TREE
+    }while(done);
+   
     get_path(vertices,pos);
     return 0;
 
