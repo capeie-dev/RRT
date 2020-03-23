@@ -95,12 +95,16 @@ void print_all_nodes(vector<vertex> vertices)
            }
 }
 
+
+
 int main()
 {   //DEFINATIONS
     srand((unsigned) time(0)); // seed for point randomizer
     vector<int> pos = {0,0};
     vector<int> par = {0,0};
     vector<int> goal = {0,0}; // goal region preset
+    int num_obs;
+    int obs[num_obs][2];
     cout<<"The 2D world is 100x100 square\n\n";
     cout<<"Enter initial x_pos: ";
     cin>>pos[0];
@@ -108,12 +112,32 @@ int main()
     cin>>pos[1];
     cout<<"Enter goal x_pos: ";
     cin>>goal[0];
-
     cout<<"Enter goal y_pos: ";
     cin>>goal[1];
 
-    //square obstacle with centroid at 20,20
-    vector<int> obs={20,20};
+    char choice;
+    cout<<"Add obstacles?[Y/N]: ";
+    cin>>choice;
+
+
+    if(choice=='y')
+    {
+    cout<<"Enter the number of obstacles: ";
+    cin>>num_obs;
+
+    for(int con=0;con<num_obs;++con)
+        {
+
+            cout<<"Enter centroid of obstacle "<<con+1<<": "<<endl;
+            cout<<"Enter x_pos: ";
+            cin>>obs[con][0];
+            cout<<endl<<"Enter y_pos: ";
+            cin>>obs[con][1];
+
+
+        }
+     }
+
 
 
     //initialize vertex tree
@@ -140,11 +164,17 @@ int main()
         vertex newnode(newpoint,par);
         vertices.push_back(newnode);
         //checks if the point lies within collision of the obstacle
-        if(newpoint[0]>obs[0]+10 && newpoint[0]<obs[0]-10)
-           {
-                if(newpoint[1]>obs[1]+10 && newpoint[1]<obs[1]-10)
-                    goto label;
-           }
+        if(choice=='y')
+        {
+            for(int cont=0; cont<num_obs;++cont)
+            {
+            if(newpoint[0]>obs[cont][0]+10 && newpoint[0]<obs[cont][0]-10)
+               {
+                    if(newpoint[1]>obs[cont][1]+10 && newpoint[1]<obs[cont][1]-10)
+                        goto label;
+               }
+            }
+        }
         //checks if the point lies within the collision of the goal point
         if(newpoint[0]>goal[0]-10 && newpoint[0]<goal[0]+10)
            {
