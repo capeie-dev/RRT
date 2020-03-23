@@ -82,6 +82,8 @@ void get_path(vector<vertex> vertices, vector<int> start_pos)
           }
         }
     }
+		cout<<"\nNode info: \n";
+                cout<<"Postion: "<<start_pos[0]<<" "<<start_pos[1];
 }
 
 void print_all_nodes(vector<vertex> vertices)
@@ -127,10 +129,10 @@ int main()
     for(int con=0;con<num_obs;++con)
         {
 
-            cout<<"Enter centroid of obstacle "<<con+1<<": "<<endl;
+            cout<<"\nEnter centroid of obstacle "<<con+1<<": "<<endl;
             cout<<"Enter x_pos: ";
             cin>>obs[con][0];
-            cout<<endl<<"Enter y_pos: ";
+            cout<<"Enter y_pos: ";
             cin>>obs[con][1];
 
 
@@ -186,6 +188,8 @@ int main()
             cout<<"";
 
         }while(done);
+
+    
 
     //print_all_nodes(vertices); //uncomment this to view all the vertices
     get_path(vertices,pos);
