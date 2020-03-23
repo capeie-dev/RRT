@@ -66,7 +66,7 @@ int main()
 {   //DEFINATIONS
     srand((unsigned) time(0)); // seed for point randomizer
 
-    vector<int> pos = {0,0};
+    vector<int> pos = {1,1};
     vector<int> par = {0,0};
     vector<int> goal = {80,80};
     vertex v(pos,par);
@@ -85,8 +85,9 @@ int main()
         newpoint = {rand() % height, rand() % width };
         cout<<"newpoint\n"<<newpoint[0]<<" "<<newpoint[1]<<endl;
         vertex add = find_nearest_vertex(vertices,newpoint);
-        add.parent = ::parentglobal;
-        vertices.push_back(add);
+        par = add.pos;
+        vertex newnode(newpoint,par);
+        vertices.push_back(newnode);
         if(newpoint[0]>75 && newpoint[0]<85)
             {
                 if(newpoint[1]>75 && newpoint[1]<85)
@@ -94,6 +95,7 @@ int main()
                         goto label;
                     }
             }
+
     }while(true);
     label:
    for(int x=0; x<vertices.size();++x)
