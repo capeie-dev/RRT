@@ -139,12 +139,13 @@ int main()
         par = add.pos;
         vertex newnode(newpoint,par);
         vertices.push_back(newnode);
+        //checks if the point lies within collision of the obstacle
         if(newpoint[0]>obs[0]+10 && newpoint[0]<obs[0]-10)
            {
                 if(newpoint[1]>obs[1]+10 && newpoint[1]<obs[1]-10)
                     goto label;
            }
-        //checks if the point lies within the given area of the goal point
+        //checks if the point lies within the collision of the goal point
         if(newpoint[0]>goal[0]-10 && newpoint[0]<goal[0]+10)
            {
                if(newpoint[1]>goal[1]-10 && newpoint[1]<goal[1]+10)
