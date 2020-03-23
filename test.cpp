@@ -68,7 +68,7 @@ int main()
 
     vector<int> pos = {1,1};
     vector<int> par = {0,0};
-    vector<int> goal = {80,80};
+    vector<int> goal = {75,85};
     vertex v(pos,par);
 
     //tree defination
@@ -88,9 +88,9 @@ int main()
         par = add.pos;
         vertex newnode(newpoint,par);
         vertices.push_back(newnode);
-        if(newpoint[0]>75 && newpoint[0]<85)
+        if(newpoint[0]>goal[0] && newpoint[0]<goal[1])
             {
-                if(newpoint[1]>75 && newpoint[1]<85)
+                if(newpoint[1]>goal[0] && newpoint[1]<goal[1])
                     {
                         goto label;
                     }
@@ -100,10 +100,10 @@ int main()
     label:
    for(int x=0; x<vertices.size();++x)
        {
-           cout<<vertices[x].pos[0]<<" "<<vertices[x].pos[1]<<endl;
+           cout<<"Node Info:\n"<<"Parent: "<<vertices[x].parent[0]<<" "<<vertices[x].parent[1]<<endl<<"Pos: "<<vertices[x].pos[0]<<" "<<vertices[x].pos[1]<<endl<<endl;
 
        }
-    //RRT IMPLENTATION
+    //END OF PRINTING THE TREE
 
     return 0;
 
