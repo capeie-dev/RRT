@@ -52,6 +52,7 @@ vertex find_nearest_vertex(vector<vertex> vertices, vector<int> newpoint)
                {
                 nearest = vertices[x];
                 nearest_dist = dist;
+                cout<<dist<<endl;
                }
 
 
@@ -75,8 +76,8 @@ int main()
     vertices.push_back(v);
     vector<int>  newpoint;
     // statespace boundaries
-    int height = 1000;
-    int width = 1000;
+    int height = 100;
+    int width = 100;
 
 
     do{
@@ -86,9 +87,15 @@ int main()
         vertex add = find_nearest_vertex(vertices,newpoint);
         add.parent = ::parentglobal;
         vertices.push_back(add);
-    }while(newpoint[0]<75 &&  newpoint[0]>80 && newpoint[1]<75 && newpoint[1]>80);
-
-
+        if(newpoint[0]>75 && newpoint[0]<85)
+            {
+                if(newpoint[1]>75 && newpoint[1]<85)
+                    {
+                        goto label;
+                    }
+            }
+    }while(true);
+    label:
    for(int x=0; x<vertices.size();++x)
        {
            cout<<vertices[x].pos[0]<<" "<<vertices[x].pos[1]<<endl;
