@@ -80,11 +80,8 @@ void get_path(vector<vertex> vertices, vector<int> start_pos)
                 i=x;
 
           }
-
-
         }
     }
-
 }
 
 void print_all_nodes(vector<vertex> vertices)
@@ -103,28 +100,37 @@ int main()
     srand((unsigned) time(0)); // seed for point randomizer
     vector<int> pos = {1,1};
     vector<int> par = {0,0};
-    vector<int> goal = {75,85};
+    vector<int> goal = {75,85}; // goal region preset
+
     cout<<"Enter Initial x_pos: ";
     cin>>pos[0];
     cout<<"Enter Intial y_pos: ";
     cin>>pos[1];
-    //cout<<"Enter number of obstacles: ";
-    /*vector<int> obs={0,0};
-    cout<<"Enter obstacle x_pos: ";
-    cin>>obs[0];
-    cout<<"Enter obstacle y_pos: ";
-    cin>>obs[1];*/
+    cout<<"Enter goal x_pos: ";
+    cin>>goal[0];
+
+    cout<<"Enter goal y_pos: ";
+    cin>>goal[1];
+
+    //square obstacle with centroid at 20,20
+    vector<int> obs={20,20};
+
+
     //initialize vertex tree
     vertex v(pos,par);
+
     //tree defination
     vector<vertex> vertices;
     vertices.push_back(v);
+
     //randompoint storage
     vector<int>  newpoint;
-    // statespace boundaries
-    int height = 100;
-    int width = 100;
 
+    // statespace boundaries
+    int height = 1000;
+    int width = 1000;
+
+    //RRT implementation
     bool done = true;
     do{
 
@@ -133,17 +139,25 @@ int main()
         par = add.pos;
         vertex newnode(newpoint,par);
         vertices.push_back(newnode);
-        if(newpoint[0]>goal[0] && newpoint[0]<goal[1])
-            {
-                if(newpoint[1]>goal[0] && newpoint[1]<goal[1])
-                    {
-                         done = false;
-                    }
-            }
+        if(newpoint[0]>obs[0]+10 && newpoint[0]<obs[0]-10)
+           {
+                if(newpoint[1]>obs[1]+10 && newpoint[1]<obs[1]-10)
+                    goto label;
+           }
+        //checks if the point lies within the given area of the goal point
+        if(newpoint[0]>goal[0]-10 && newpoint[0]<goal[0]+10)
+           {
+               if(newpoint[1]>goal[1]-10 && newpoint[1]<goal[1]+10)
+                   {
+                       done = false;
+                   }
+           }
+        label:
+            cout<<"";
 
-    }while(done);
+        }while(done);
 
-    //print_all_nodes(vertices);
+    //print_all_nodes(vertices); //uncomment this to view all the vertices
     get_path(vertices,pos);
     return 0;
 
