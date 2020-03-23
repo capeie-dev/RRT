@@ -98,13 +98,13 @@ void print_all_nodes(vector<vertex> vertices)
 int main()
 {   //DEFINATIONS
     srand((unsigned) time(0)); // seed for point randomizer
-    vector<int> pos = {1,1};
+    vector<int> pos = {0,0};
     vector<int> par = {0,0};
-    vector<int> goal = {75,85}; // goal region preset
-
-    cout<<"Enter Initial x_pos: ";
+    vector<int> goal = {0,0}; // goal region preset
+    cout<<"The 2D world is 100x100 square\n\n";
+    cout<<"Enter initial x_pos: ";
     cin>>pos[0];
-    cout<<"Enter Intial y_pos: ";
+    cout<<"Enter intial y_pos: ";
     cin>>pos[1];
     cout<<"Enter goal x_pos: ";
     cin>>goal[0];
@@ -127,8 +127,8 @@ int main()
     vector<int>  newpoint;
 
     // statespace boundaries
-    int height = 1000;
-    int width = 1000;
+    int height = 100;
+    int width = 100;
 
     //RRT implementation
     bool done = true;
