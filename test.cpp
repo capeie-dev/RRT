@@ -33,10 +33,6 @@ class vertex{
             {
                 pos = pos_arg;
                 parent = par_arg;
-                if(parent[0]!=0 && parent[0]!=0)
-                    {
-                        depth = depth+1;
-                    }
             }
         void print()
         {
@@ -91,18 +87,39 @@ void get_path(vector<vertex> vertices, vector<int> start_pos)
 
 }
 
+void print_all_nodes(vector<vertex> vertices)
+{
+        for(int x=0;x<vertices.size();++x)
+           {
+             cout<<"\n\nNode info:\n";
+             vertices[x].print();
+             cout<<endl;
+             cout<<"Parent: "<<vertices[x].parent[0]<<" "<<vertices[x].parent[1]<<endl;
+           }
+}
+
 int main()
 {   //DEFINATIONS
     srand((unsigned) time(0)); // seed for point randomizer
-
     vector<int> pos = {1,1};
     vector<int> par = {0,0};
     vector<int> goal = {75,85};
+    cout<<"Enter Initial x_pos: ";
+    cin>>pos[0];
+    cout<<"Enter Intial y_pos: ";
+    cin>>pos[1];
+    //cout<<"Enter number of obstacles: ";
+    /*vector<int> obs={0,0};
+    cout<<"Enter obstacle x_pos: ";
+    cin>>obs[0];
+    cout<<"Enter obstacle y_pos: ";
+    cin>>obs[1];*/
+    //initialize vertex tree
     vertex v(pos,par);
-
     //tree defination
     vector<vertex> vertices;
     vertices.push_back(v);
+    //randompoint storage
     vector<int>  newpoint;
     // statespace boundaries
     int height = 100;
@@ -125,7 +142,8 @@ int main()
             }
 
     }while(done);
-   
+
+    //print_all_nodes(vertices);
     get_path(vertices,pos);
     return 0;
 
