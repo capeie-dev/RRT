@@ -8,7 +8,7 @@
 using namespace std;
 
 int depth=0; // to be used to keep node constraint
-
+int d;
 float distance(vector<int> point1, vector<int> point2)
 {
 	float x = point1[0] - point2[0]; //calculating number to square in next step
@@ -52,6 +52,7 @@ vertex find_nearest_vertex(vector<vertex> vertices, vector<int> newpoint)
                {
                 nearest = vertices[x];
                 nearest_dist = dist;
+                ::d = dist;
 
                }
 
@@ -62,8 +63,7 @@ vertex find_nearest_vertex(vector<vertex> vertices, vector<int> newpoint)
 }
 
 void get_path(vector<vertex> vertices, vector<int> start_pos)
-{   
-   cout<<"Path from goal to start point:\n";
+{
     int siz = vertices.size();
     int i = siz-1;
     vector<int> parent = vertices[siz-1].parent;
@@ -84,7 +84,7 @@ void get_path(vector<vertex> vertices, vector<int> start_pos)
         }
     }
 		cout<<"\nNode info: \n";
-                cout<<"Postion: "<<start_pos[0]<<" "<<start_pos[1]<<endl;
+                cout<<"Postion: "<<start_pos[0]<<" "<<start_pos[1];
 }
 
 void print_all_nodes(vector<vertex> vertices)
@@ -106,6 +106,7 @@ int main()
     vector<int> pos = {0,0};
     vector<int> par = {0,0};
     vector<int> goal = {0,0}; // goal region preset
+    int step_size;
     int num_obs;
     int obs[num_obs][2];
     cout<<"The 2D world is 100x100 square\n\n";
@@ -117,7 +118,8 @@ int main()
     cin>>goal[0];
     cout<<"Enter goal y_pos: ";
     cin>>goal[1];
-    
+    cout<<"Enter the step size: ";
+    cin>>step_size;
     //Add obstacles
     char choice;
     cout<<"Add obstacles?[Y/N]: ";
@@ -159,9 +161,15 @@ int main()
     //RRT implementation
     bool done = true;
     do{
-
+        label1:
         newpoint = {rand() % height, rand() % width };
         vertex add = find_nearest_vertex(vertices,newpoint);
+
+        //checks step size
+        if(d>step_size)
+          {
+            goto label1;
+          }
         par = add.pos;
         vertex newnode(newpoint,par);
         vertices.push_back(newnode);
@@ -190,11 +198,12 @@ int main()
 
         }while(done);
 
-    
+
 
     //print_all_nodes(vertices); //uncomment this to view all the vertices
     get_path(vertices,pos);
     return 0;
 
 }
+
 
