@@ -9,7 +9,7 @@
 using namespace std;
 
 int depth=0; // to be used to keep node constraint
-int d;
+
 float distance(vector<int> point1, vector<int> point2)
 {
 	float x = point1[0] - point2[0]; //calculating number to square in next step
@@ -53,7 +53,7 @@ vertex find_nearest_vertex(vector<vertex> vertices, vector<int> newpoint)
                {
                 nearest = vertices[x];
                 nearest_dist = dist;
-                ::d = dist;
+
 
                }
 
@@ -63,31 +63,36 @@ vertex find_nearest_vertex(vector<vertex> vertices, vector<int> newpoint)
     return nearest;
 }
 
-void get_path(vector<vertex> vertices, vector<int> start_pos)
+void get_path(vector<vertex> vertices, vector<int> start_pos, vector<int> goal_pos, int step_size)
 {   ofstream outfile;
     outfile.open("path.txt",ios::trunc);
     int siz = vertices.size();
     int i = siz-1;
     vector<int> parent = vertices[siz-1].parent;
+    vector<int> temp = goal_pos;
+    outfile<<goal_pos[0]<<" "<<goal_pos[1]<<endl;
 
-    while(parent[0]!=start_pos[0] && parent[1]!=start_pos[1])
-    {
-    for(int x=0;x<siz-1;++x)
-        {
-        if(vertices[x].pos[0] == parent[0] && vertices[x].pos[1]==parent[1] && x!=i)
+
+     while(parent[0]!=start_pos[0] && parent[1]!=start_pos[1])
           {
-                cout<<"\nNode info: \n";
-                vertices[x].print();
-                cout<<endl;
-                parent = vertices[x].parent;
-                i=x;
-                outfile<<vertices[x].pos[0]<<","<<vertices[x].pos[1]<<endl;
+            for(int x=0;x<siz-1;++x)
+                {
+                    if(vertices[x].pos[0] == parent[0] && vertices[x].pos[1]==parent[1] && x!=i)
+                        {
+                        cout<<"\nNode info: \n";
+                        vertices[x].print();
+                        cout<<endl;
+                        parent = vertices[x].parent;
+                        i=x;
+                        outfile<<vertices[x].pos[0]<<" "<<vertices[x].pos[1]<<endl;
 
-          }
+                        }
+                }
         }
-    }
 		cout<<"\nNode info: \n";
         cout<<"Postion: "<<start_pos[0]<<" "<<start_pos[1];
+        outfile<<start_pos[0]<<" "<<start_pos[1]<<endl;
+        outfile.close();
 
 }
 
@@ -102,13 +107,15 @@ void print_all_nodes(vector<vertex> vertices)
            }
 }
 
-void write_file(vector<vertex> vertices)
+void write_file(vector<vertex> vertices, vector<int> start_pos, vector<int> goal)
 {
     ofstream outfile;
     outfile.open("all_nodes.txt",ios::trunc);
 
     for(int x=0;x<vertices.size();++x)
-        outfile<<vertices[x].pos[0]<<","<<vertices[x].pos[1]<<endl;
+        outfile<<vertices[x].pos[0]<<" "<<vertices[x].pos[1]<<endl;
+    outfile<<start_pos[0]<<" "<<start_pos[1]<<endl;
+    outfile<<goal[0]<<" "<<goal[1]<<endl;
     outfile.close();
 
 }
@@ -117,6 +124,11 @@ void write_file(vector<vertex> vertices)
 
 int main()
 {   //DEFINATIONS
+    ofstream out_obstacles;
+
+    ofstream out_endpoints;
+    out_endpoints.open("endpoints.txt",ios::trunc);
+
     srand((unsigned) time(0)); // seed for point randomizer
     vector<int> pos = {0,0};
     vector<int> par = {0,0};
@@ -133,8 +145,10 @@ int main()
     cin>>goal[0];
     cout<<"Enter goal y_pos: ";
     cin>>goal[1];
-    cout<<"Enter the step size: ";
-    cin>>step_size;
+
+
+    out_endpoints<<pos[0]<<" "<<pos[1]<<endl<<goal[0]<<" "<<goal[1];
+    out_endpoints.close();
     //Add obstacles
     char choice;
     cout<<"Add obstacles?[Y/N]: ";
@@ -143,7 +157,7 @@ int main()
     {
     cout<<"Enter the number of obstacles: ";
     cin>>num_obs;
-
+    out_obstacles.open("obstacles.txt",ios::trunc);
     for(int con=0;con<num_obs;++con)
         {
 
@@ -152,9 +166,12 @@ int main()
             cin>>obs[con][0];
             cout<<"Enter y_pos: ";
             cin>>obs[con][1];
+            out_obstacles<<obs[con][0]<<" "<<obs[con][1]<<endl;
+
 
 
         }
+        out_obstacles.close();
      }
 
 
@@ -176,15 +193,12 @@ int main()
     //RRT implementation
     bool done = true;
     do{
-        label1:
+
         newpoint = {rand() % height, rand() % width };
         vertex add = find_nearest_vertex(vertices,newpoint);
 
         //checks step size
-        if(d>step_size)
-          {
-            goto label1;
-          }
+
         par = add.pos;
         vertex newnode(newpoint,par);
         vertices.push_back(newnode);
@@ -214,9 +228,9 @@ int main()
         }while(done);
 
 
-    //write_file(vertices);  //unomment this write all the veritces to a text file
+    write_file(vertices, pos, goal);  //unomment this write all the veritces to a text file
     //print_all_nodes(vertices); //uncomment this to view all the vertices
-    get_path(vertices,pos);
+    get_path(vertices,pos, goal,step_size);
     return 0;
 
 }
