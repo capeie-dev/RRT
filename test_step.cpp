@@ -79,7 +79,7 @@ void get_path(vector<vertex> vertices, vector<int> start_pos, vector<int> goal_p
           {
             for(int x=0;x<siz-1;++x)
                 {
-                    if(vertices[x].pos[0] == parent[0] && vertices[x].pos[1]==parent[1] && x!=i)
+                    if(vertices[x].pos[0] == parent[0] && vertices[x].pos[1]==parent[1] && x!=i )
                         {
                         cout<<"\nNode info: \n";
                         vertices[x].print();
@@ -198,11 +198,12 @@ int main()
 
     //randompoint storage
     vector<int>  newpoint;
-
+    vector<int> temp;
     // statespace boundaries
     int height = 100;
     int width = 100;
-
+    int obs_rad = 5; //obstacle radius
+    ;
     //RRT implementation
     bool done = true;
     do{
@@ -214,6 +215,7 @@ int main()
        if(::d>step_size)
          {
             int dist = distance(add.pos,newpoint);
+
             int m = step_size;
             int n = dist-step_size;
             vector<int> near = {0,0};
@@ -222,15 +224,22 @@ int main()
             newpoint[1] = ((m*newpoint[1])+(n*add.pos[1]))/dist;
 
          }
-         if(choice=='y')
+
+        if(choice=='y')
         {
             for(int cont=0; cont<num_obs;++cont)
             {
-            if(newpoint[0]>obs[cont][0]+20 && newpoint[0]<obs[cont][0]-20)
-               {
-                    if(newpoint[1]>obs[cont][1]+20 && newpoint[1]<obs[cont][1]-20)
-                        goto label;
-               }
+                float x = newpoint[0] - obs[cont][0]; //calculating number to square in next step
+                float y = newpoint[1] - obs[cont][1];
+                float dist;
+
+                dist = pow(x, 2) + pow(y, 2);       //calculating Euclidean distance
+                dist = sqrt(dist);
+                if(dist<obs_rad)
+                 {
+                   cout<<"here";
+                   goto label;
+                 }
             }
         }
         par = add.pos;
