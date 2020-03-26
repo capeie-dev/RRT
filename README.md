@@ -14,17 +14,19 @@
 	 $ ./app_step
  
 
-video demo of the working - https://youtu.be/_UQXuVOX684
+Video demo of the working - https://youtu.be/_UQXuVOX684
+
 Sample output:
 ![Test Image 1](output.png)
 
 # Explanantion and some assumptions:
  1. The world space is a 2D 100x100 square, hence the coordinates that are input into the program must be within the range (0-      100,0-100),
- 2. The obstacles are assumed to squares of 10x10 ( The input being the center of the square).
+ 2. The obstacles are assumed to squares of 20x20, vizualized as circles of with radius that fits in  	  the square ( The input being the center of the square).
  3. The output is a list of points from the goal to the origin. 
 
 # Things to be done differently:
  1. Make a header file for classes and functions.
- 2. Add node limit to the algorithm.
+ 
+
 
 
