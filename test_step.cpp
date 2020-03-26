@@ -9,7 +9,7 @@
 using namespace std;
 
 int depth=0; // to be used to keep node constraint
-
+int d;
 float distance(vector<int> point1, vector<int> point2)
 {
 	float x = point1[0] - point2[0]; //calculating number to square in next step
@@ -21,6 +21,7 @@ float distance(vector<int> point1, vector<int> point2)
 
 	return dist;
 }
+
 
 
 
@@ -53,6 +54,7 @@ vertex find_nearest_vertex(vector<vertex> vertices, vector<int> newpoint)
                {
                 nearest = vertices[x];
                 nearest_dist = dist;
+                ::d = dist;
 
 
                }
@@ -120,12 +122,24 @@ void write_file(vector<vertex> vertices, vector<int> start_pos, vector<int> goal
 
 }
 
+/*vector<int> step_point(vector<vertex> vertices, vector<int> newpoint, int step_size)
+    {
+        vector<int> temp = vertices.pos;
+        int dist = distance(temp,newpoint);
+        int m = step_size;
+        int n = dist-step_size;
+        vector<int> near = {0,0};
 
+        near[0] = ((m*newpoint[0])+(n*vertices.pos[0]))/dist;
+        near[1] = ((m*newpoint[1])+(n*vertices.pos[1]))/dist;
+        return near;
+    }
+*/
 
 int main()
 {   //DEFINATIONS
     ofstream out_obstacles;
-
+    out_obstacles.open("obstacles.txt",ios::trunc);
     ofstream out_endpoints;
     out_endpoints.open("endpoints.txt",ios::trunc);
 
@@ -145,8 +159,8 @@ int main()
     cin>>goal[0];
     cout<<"Enter goal y_pos: ";
     cin>>goal[1];
-
-
+    cout<<"Enter step size: ";
+    cin>>step_size;
     out_endpoints<<pos[0]<<" "<<pos[1]<<endl<<goal[0]<<" "<<goal[1];
     out_endpoints.close();
     //Add obstacles
@@ -157,7 +171,6 @@ int main()
     {
     cout<<"Enter the number of obstacles: ";
     cin>>num_obs;
-    out_obstacles.open("obstacles.txt",ios::trunc);
     for(int con=0;con<num_obs;++con)
         {
 
@@ -171,11 +184,11 @@ int main()
 
 
         }
-        out_obstacles.close();
+
      }
 
 
-
+   out_obstacles.close();
     //initialize vertex tree
     vertex v(pos,par);
 
@@ -193,27 +206,38 @@ int main()
     //RRT implementation
     bool done = true;
     do{
-
+        label:
         newpoint = {rand() % height, rand() % width };
         vertex add = find_nearest_vertex(vertices,newpoint);
 
         //checks step size
+       if(::d>step_size)
+         {
+            int dist = distance(add.pos,newpoint);
+            int m = step_size;
+            int n = dist-step_size;
+            vector<int> near = {0,0};
 
-        par = add.pos;
-        vertex newnode(newpoint,par);
-        vertices.push_back(newnode);
-        //checks if the point lies within collision of the obstacle
-        if(choice=='y')
+            newpoint[0] = ((m*newpoint[0])+(n*add.pos[0]))/dist;
+            newpoint[1] = ((m*newpoint[1])+(n*add.pos[1]))/dist;
+
+         }
+         if(choice=='y')
         {
             for(int cont=0; cont<num_obs;++cont)
             {
-            if(newpoint[0]>obs[cont][0]+10 && newpoint[0]<obs[cont][0]-10)
+            if(newpoint[0]>obs[cont][0]+20 && newpoint[0]<obs[cont][0]-20)
                {
-                    if(newpoint[1]>obs[cont][1]+10 && newpoint[1]<obs[cont][1]-10)
+                    if(newpoint[1]>obs[cont][1]+20 && newpoint[1]<obs[cont][1]-20)
                         goto label;
                }
             }
         }
+        par = add.pos;
+        vertex newnode(newpoint,par);
+        vertices.push_back(newnode);
+        //checks if the point lies within collision of the obstacle
+
         //checks if the point lies within the collision of the goal point
         if(newpoint[0]>goal[0]-10 && newpoint[0]<goal[0]+10)
            {
@@ -222,8 +246,7 @@ int main()
                        done = false;
                    }
            }
-        label:
-            cout<<"";
+
 
         }while(done);
 
