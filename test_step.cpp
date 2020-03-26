@@ -5,6 +5,7 @@
 #include<ctime>
 #include<math.h>
 #include<iomanip>
+#include<fstream>
 using namespace std;
 
 int depth=0; // to be used to keep node constraint
@@ -63,7 +64,8 @@ vertex find_nearest_vertex(vector<vertex> vertices, vector<int> newpoint)
 }
 
 void get_path(vector<vertex> vertices, vector<int> start_pos)
-{
+{   ofstream outfile;
+    outfile.open("path.txt",ios::trunc);
     int siz = vertices.size();
     int i = siz-1;
     vector<int> parent = vertices[siz-1].parent;
@@ -79,12 +81,14 @@ void get_path(vector<vertex> vertices, vector<int> start_pos)
                 cout<<endl;
                 parent = vertices[x].parent;
                 i=x;
+                outfile<<vertices[x].pos[0]<<","<<vertices[x].pos[1]<<endl;
 
           }
         }
     }
 		cout<<"\nNode info: \n";
-                cout<<"Postion: "<<start_pos[0]<<" "<<start_pos[1];
+        cout<<"Postion: "<<start_pos[0]<<" "<<start_pos[1];
+
 }
 
 void print_all_nodes(vector<vertex> vertices)
@@ -96,6 +100,17 @@ void print_all_nodes(vector<vertex> vertices)
              cout<<endl;
              cout<<"Parent: "<<vertices[x].parent[0]<<" "<<vertices[x].parent[1]<<endl;
            }
+}
+
+void write_file(vector<vertex> vertices)
+{
+    ofstream outfile;
+    outfile.open("all_nodes.txt",ios::trunc);
+
+    for(int x=0;x<vertices.size();++x)
+        outfile<<vertices[x].pos[0]<<","<<vertices[x].pos[1]<<endl;
+    outfile.close();
+
 }
 
 
@@ -199,7 +214,7 @@ int main()
         }while(done);
 
 
-
+    //write_file(vertices);  //unomment this write all the veritces to a text file
     //print_all_nodes(vertices); //uncomment this to view all the vertices
     get_path(vertices,pos);
     return 0;
