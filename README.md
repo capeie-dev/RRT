@@ -8,13 +8,15 @@
 	 $ git clone https://github.com/capeieboi/Mowit.git
      $ cd Mowit
 	 $ ./app_step
-         $ python3 viz.py
+     $ python3 viz.py
      (OPTIONAL - If step 3 does not work) 
 	 $ g++ -o app test_step.cpp 
 	 $ ./app_step
  
 
 video demo of the working - https://youtu.be/_UQXuVOX684
+Sample output:
+![Test Image 1](output.png)
 
 # Explanantion and some assumptions:
  1. The world space is a 2D 100x100 square, hence the coordinates that are input into the program must be within the range (0-      100,0-100),
@@ -24,4 +26,5 @@ video demo of the working - https://youtu.be/_UQXuVOX684
 # Things to be done differently:
  1. Make a header file for classes and functions.
  2. Add node limit to the algorithm.
+
 
